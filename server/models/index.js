@@ -2,57 +2,51 @@ var db = require('../db');
 
 module.exports = {
   messages: {
-    get: function () {
-      db.connection.connect();
-      
-      var query = db.connection.query('SELECT user, text FROM messages')
+    get: function (callback) {
 
-      query.on('error', function(err) {
-        throw err;
-      });
-
-      query.on('fields', function(fields) {
-        console.log(fields);
-      });
-
-      query.on('result', function(row) {
-        db.connection.pause();
-
-        // do something here idk what
-        console.log(row);
-
-        db.connection.resume();
+      db.connection.query('SELECT * FROM messages;', function(err, results) {
+        if (err) { 
+          console.log (err) 
+        } else {
+          callback(null, results);
+        }
       })
 
-      db.connection.end();
     }, // a function which produces all the messages
-    post: function () {
-
-      db.connection.connect();
-
-      var query = db.connection.query('INSERT INTO messages VALUES ');
-
-      query.on('error', function(err) {
-        throw err;
-      });
-
-      query.on('fields', function(fields) {
-        console.log(fields);
-      });
-
-      query.on('result', function(result) {
-        console.log(result);
-      });
-
-      db.connection.end();
+    post: function (req, callback) {
+      db.connection.query(`INSERT INTO messages (username, message, roomname) VALUES ("${req.username}", "${req.message}", "${req.roomname}");`, function(err, results) {
+        if (err) { 
+          console.log (err) 
+        } else {
+          callback(null, results);
+        }
+      })
 
     } // a function which can be used to insert a message into the database
   },
 
   users: {
     // Ditto as above.
-    get: function () {},
-    post: function () {}
+    get: function (callback) {
+
+      db.connection.query('SELECT username FROM users;', function(err, results) {
+        if (err) {
+          throw (err)
+        } else {
+          callback(null, results);
+        }
+      })
+
+    },
+    post: function (req, callback) {
+      db.connection.query(`INSERT INTO users (username) VALUES ("${req.username}");`, function(err, results) {
+        if (err) { 
+          console.log (err) 
+        } else {
+          callback(null, results);
+        }
+      })
+    }
   }
 };
 

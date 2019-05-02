@@ -2,23 +2,46 @@ var models = require('../models');
 
 module.exports = {
   messages: {
-    get: function (req, res) {
-      if (req.method === 'GET') {
-        res.writeHead(200, headers);
-        res.end()
-      }
-    }, // a function which handles a get request for all messages
-    post: function (req, res) {
-      if (req.method === 'POST') {
-        res.writeHead(200, headers);
-        res.end()
-    } // a function which handles posting a message to the database
+    get: function (req, res, callback) {
+      models.messages.get((err, data) => {
+        if (err) {
+          throw (err);
+        } else {
+          res.send(data);
+        }
+      })
+    }, 
+    post: function (req, res, callback) {
+      models.messages.post(req.body, (err, data) => {
+        if (err) {
+          throw (err);
+        } else {
+          res.send();
+        }
+      }) 
+  }
   },
-
   users: {
     // Ditto as above
-    get: function (req, res) {},
-    post: function (req, res) {}
+    get: function (req, res, callback) {
+      models.users.get((err, data) => {
+        if (err) { 
+          throw (err) 
+        } else {
+          res.send(data);
+        }
+      })
+    },
+    post: function (req, res, callback) {
+      models.users.post(req.body, (err, data) => {
+        if (err) {
+          throw (err);
+        } else {
+          res.send();
+        }
+      }) 
+    }
   }
+
 };
 
