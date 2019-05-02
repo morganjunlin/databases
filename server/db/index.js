@@ -1,25 +1,44 @@
+/*
+// pure SQL method
+
 var mysql = require('mysql');
-
-// Create a database connection and export it from this file.
-// You will need to connect with the user "root", no password,
-// and to the database "chat".
-
 var connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'student',
-    password: 'student',
-    database: 'chat'
+  host: 'localhost',
+  user: 'student',
+  password: 'student',
+  database: 'chat'
 });
 
-connection.connect(function(err) {
-    if (err) {
-      console.error('error connecting: ' + err.stack);
-      return;
-    }
-   
-    console.log('connected as id ' + connection.threadId);
+*/
+
+var Sequelize = require('sequelize');
+
+var db = new Sequelize('chat', 'student', 'student');
+
+db
+  .authenticate()
+  .then(() => {
+    console.log('Connection has been established successfully.');
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database:', err);
   });
 
+var Messages = db.define('messages', {
+  username: Sequelize.STRING,
+  message: Sequelize.STRING,
+  roomname: Sequelize.STRING
+});
 
-module.exports.connection = connection;
+var Users = db.define('users', {
+  username: Sequelize.STRING
+});
+
+Messages.sync();
+Users.sync();
+
+module.exports = {
+  Messages,
+  Users
+}
 
