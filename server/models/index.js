@@ -35,7 +35,7 @@ module.exports = {
 
       */
 
-     db.Messages.create({ username: `${req.username}`, message: `${req.message}`, roomname: `${req.roomname}` })
+     db.Messages.create({ username: req.username, message: req.message, roomname: req.roomname })
       .then(data => callback(null, data))
       .catch(err => callback(err));
     }
@@ -74,7 +74,7 @@ module.exports = {
       })
 
       */
-     
+
      db.Users.create({ username: `${req.username}` })
        .then(data => callback(null, data))
        .catch(err => callback(err));
