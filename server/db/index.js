@@ -13,7 +13,7 @@ var connection = mysql.createConnection({
 
 var Sequelize = require('sequelize');
 
-var db = new Sequelize('chat', 'student', 'student');
+var db = new Sequelize('chat', 'root', 'password');
 
 db
   .authenticate()
